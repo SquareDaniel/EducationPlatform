@@ -1,0 +1,14 @@
+<!doctype html>
+<title>Courses</title>
+<h1>Courses</h1>
+{% if g.user %}
+  <p><a href="{{ url_for('create_course') }}">Create Course</a></p>
+{% endif %}
+<ul>
+{% for course in courses %}
+  <li><strong>{{ course['title'] }}</strong> - {{ course['description'] or '' }}</li>
+{% else %}
+  <li>No courses available.</li>
+{% endfor %}
+</ul>
+<p><a href="{{ url_for('index') }}">Home</a></p>
