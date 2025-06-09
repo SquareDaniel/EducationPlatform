@@ -1,6 +1,7 @@
 # EducationPlatform
 
-Simple Flask application with login and registration. Users are stored in a local SQLite database.
+Simple Flask application with login, registration and basic course management.
+Users and courses are stored in a local SQLite database.
 
 ## Running
 
@@ -12,3 +13,5 @@ python app.py
 ```
 
 The app creates `users.db` in the project directory for storing user information.
+
+When logged in you can view and create courses from the Courses page.

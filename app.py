@@ -31,6 +31,13 @@ def init_db():
             password TEXT NOT NULL
         )"""
     )
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS courses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            description TEXT
+        )"""
+    )
     db.commit()
 
 
@@ -91,6 +98,34 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+
+@app.route('/courses')
+def courses():
+    db = get_db()
+    courses = db.execute('SELECT id, title, description FROM courses').fetchall()
+    return render_template('courses.html', courses=courses)
+
+
+@app.route('/courses/create', methods=['GET', 'POST'])
+def create_course():
+    if g.user is None:
+        return redirect(url_for('login'))
+    error = None
+    if request.method == 'POST':
+        title = request.form['title']
+        description = request.form['description']
+        if not title:
+            error = 'Title required.'
+        else:
+            db = get_db()
+            db.execute(
+                'INSERT INTO courses (title, description) VALUES (?, ?)',
+                (title, description),
+            )
+            db.commit()
+            return redirect(url_for('courses'))
+    return render_template('create_course.html', error=error)
 
 
 if __name__ == '__main__':
